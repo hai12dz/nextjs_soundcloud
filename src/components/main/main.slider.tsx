@@ -8,8 +8,10 @@ import Button from "@mui/material/Button/Button";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Divider from '@mui/material/Divider';
-
-const MainSlider = () => {
+interface IProps {
+    data: ITrackTop[]
+}
+const MainSlider = (props: IProps) => {
     const NextArrow = (props: any) => {
         return (
             <Button variant="outlined"

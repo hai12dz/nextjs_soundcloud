@@ -19,7 +19,7 @@ export default async function HomePage() {
   // console.log("res", await res.json());
 
 
-  const res = await sendRequest<IRequest>({
+  const chills = await sendRequest<IBackendRes<ITrackTop[]>>({
     url: `http://localhost:8000/api/v1/tracks/top`,
     method: 'POST',
     body: {
@@ -27,11 +27,31 @@ export default async function HomePage() {
       limit: 10,
     }
   })
+
+  const workouts = await sendRequest<IBackendRes<ITrackTop[]>>({
+    url: `http://localhost:8000/api/v1/tracks/top`,
+    method: 'POST',
+    body: {
+      category: "WORKOUT",
+      limit: 10,
+    }
+  })
+
+  const party = await sendRequest<IBackendRes<ITrackTop[]>>({
+    url: `http://localhost:8000/api/v1/tracks/top`,
+    method: 'POST',
+    body: {
+      category: "PARTY",
+      limit: 10,
+    }
+  })
+
   return (
     <>
       <Container>
-        <MainSlider />
-
+        <MainSlider data={chills?.data ?? []} />
+        <MainSlider data={workouts?.data ?? []} />
+        <MainSlider data={party?.data ?? []} />
       </Container>
     </>
   );
