@@ -20,7 +20,7 @@ export default async function HomePage() {
 
 
   const chills = await sendRequest<IBackendRes<ITrackTop[]>>({
-    url: `http://localhost:8000/api/v1/tracks/top`,
+    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/top`,
     method: 'POST',
     body: {
       category: "CHILL",
@@ -29,7 +29,7 @@ export default async function HomePage() {
   })
 
   const workouts = await sendRequest<IBackendRes<ITrackTop[]>>({
-    url: `http://localhost:8000/api/v1/tracks/top`,
+    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/top`,
     method: 'POST',
     body: {
       category: "WORKOUT",
@@ -38,7 +38,7 @@ export default async function HomePage() {
   })
 
   const party = await sendRequest<IBackendRes<ITrackTop[]>>({
-    url: `http://localhost:8000/api/v1/tracks/top`,
+    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/top`,
     method: 'POST',
     body: {
       category: "PARTY",
@@ -49,9 +49,18 @@ export default async function HomePage() {
   return (
     <>
       <Container>
-        <MainSlider data={chills?.data ?? []} />
-        <MainSlider data={workouts?.data ?? []} />
-        <MainSlider data={party?.data ?? []} />
+        <MainSlider
+          title={"Top Chill"}
+          data={chills?.data ?? []}
+        />
+        <MainSlider
+          title={"Top Workout"}
+          data={workouts?.data ?? []}
+        />
+        <MainSlider
+          title={"Top Party"}
+          data={party?.data ?? []}
+        />
       </Container>
     </>
   );
