@@ -181,7 +181,7 @@ export default function AppHeader() {
                             component="div"
                             sx={{ display: { xs: 'none', sm: 'block' } }}
                         >
-                            SoundCloud
+                            <Link style={{ color: 'unset', textDecoration: 'none' }} href={"/"}>   SoundCloud</Link>
                         </Typography>
                         <Search>
                             <SearchIconWrapper>
