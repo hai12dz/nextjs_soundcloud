@@ -1,38 +1,16 @@
 'use client'
 
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { useSearchParams } from 'next/navigation';
 import { WaveSurferOptions } from "wavesurfer.js";
-// WaveSurfer hook
-const useWavesurfer = (containerRef: React.RefObject<HTMLDivElement>,
-    options: Omit<WaveSurferOptions, 'container'>) => {
-    const [wavesurfer, setWavesurfer] = useState<any>(null)
+import { useWavesurfer } from "@/utils/customHook";
 
-    // Initialize wavesurfer when the container mounts
-    // or any of the props change
-    useEffect(() => {
-        if (!containerRef.current) return
-
-        const ws = WaveSurfer.create({
-            ...options,
-            container: containerRef.current,
-        })
-
-        setWavesurfer(ws)
-
-        return () => {
-            ws.destroy()
-        }
-    }, [options, containerRef])
-
-    return wavesurfer
-}
 const WaveTrack = () => {
     const searchParams = useSearchParams()
     const fileName = searchParams.get('audio');
     const containerRef = useRef<HTMLDivElement>(null);
-
+    const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const optionsMemo = useMemo(() => {
         return {
             waveColor: 'rgb(200, 0, 200)',
@@ -41,34 +19,36 @@ const WaveTrack = () => {
         }
     }, []);
 
-    // const options = {
-    //     waveColor: 'rgb(200, 0, 200)',
-    //     progressColor: 'rgb(100, 0, 100)',
-    //     url: `/api?audio=${fileName}`,
-    // }
-
     const wavesurfer = useWavesurfer(containerRef, optionsMemo);
+    useEffect(() => {
+        if (!wavesurfer) return
+        setIsPlaying(false)
 
+        const subscriptions = [
+            wavesurfer.on('play', () => setIsPlaying(true)),
+            wavesurfer.on('pause', () => setIsPlaying(false)),
+        ]
 
-    // useEffect(() => {
-    //     if (containerRef.current) {
-    //         const wavesurfer = WaveSurfer.create({
-    //             container: containerRef.current,
-    //             waveColor: 'rgb(200, 0, 200)',
-    //             progressColor: 'rgb(100, 0, 100)',
-    //             url: `/api?audio=${fileName}`,
-    //         })
-
-    //         return () => {
-    //             wavesurfer.destroy()
-    //         }
-    //     }
-    // }, [])
-
+        return () => {
+            subscriptions.forEach((unsub) => unsub())
+        }
+    }, [wavesurfer])
+    const onPlayClick = useCallback(() => {
+        if (wavesurfer) {
+            wavesurfer.isPlaying() ? wavesurfer.pause() : wavesurfer.play();
+        }
+    }, [wavesurfer]);
     return (
-        <div ref={containerRef}>
-            wave track
+        <div>
+            <div ref={containerRef}>
+                wave track
+            </div>
+            <button onClick={() => { onPlayClick() }}>
+                {isPlaying ? "Pause" : "Play"}
+            </button>
+
         </div>
+
     )
 }
 
