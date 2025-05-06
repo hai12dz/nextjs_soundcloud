@@ -1,6 +1,17 @@
 .wave-form-container {
     cursor: pointer;
     position: relative;
+
+    &:hover {
+        cursor: pointer;
+
+        #hover {
+            opacity: 1;
+
+        }
+    }
+
+
 }
 
 #hover {
