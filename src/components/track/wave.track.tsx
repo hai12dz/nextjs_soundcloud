@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { useSearchParams } from 'next/navigation';
-
+import { WaveSurferOptions } from "wavesurfer.js";
 // WaveSurfer hook
-const useWavesurfer = (containerRef: any, options: any) => {
+const useWavesurfer = (containerRef: React.RefObject<HTMLDivElement>,
+    options: Omit<WaveSurferOptions, 'container'>) => {
     const [wavesurfer, setWavesurfer] = useState<any>(null)
 
     // Initialize wavesurfer when the container mounts
