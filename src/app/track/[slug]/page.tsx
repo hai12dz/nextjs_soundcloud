@@ -8,7 +8,7 @@ const DetailTrackPage = (props: any) => {
     const { params } = props
     const search = searchParams.get('audio')
     const slug = params.slug
-
+    console.log('slug', slug)
 
     return (
         <Container>
