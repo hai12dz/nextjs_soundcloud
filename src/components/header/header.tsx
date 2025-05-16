@@ -19,7 +19,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Link from 'next/link'
-
+import { useSession, signIn, signOut } from "next-auth/react"
 //styled-component
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -63,6 +63,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function AppHeader() {
+    const { data: session } = useSession()
+    console.log('session', session)
+    console.log('usesession', useSession())
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
         React.useState<null | HTMLElement>(null);
@@ -200,12 +203,17 @@ export default function AppHeader() {
                             cursor: "pointer",
                             "> a ": { color: "unset", textDecoration: "none" }
                         }}>
-                            <Link href={"/playlist"}>Playlist</Link>
-                            <Link href={"/like"}>Likes</Link>
-                            <span>Upload</span>
-                            <Avatar
-                                onClick={handleProfileMenuOpen}
-                            >ER</Avatar>
+                            {session ? <>
+                                <Link href={"/playlist"}>Playlist</Link>
+                                <Link href={"/like"}>Likes</Link>
+                                <span>Upload</span>
+                                <Avatar
+                                    onClick={handleProfileMenuOpen}
+                                >ER</Avatar>
+                            </> :
+                                <>
+                                    <Link href={"/api/auth/signin"}>Login</Link>
+                                </>}
                         </Box>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
