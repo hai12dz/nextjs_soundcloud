@@ -1,10 +1,15 @@
-const SignInPage = () => {
+import AuthSignIn from "@/components/auth/auth.signin"
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
+const SignInPage = async () => {
+    const session = await getServerSession(authOptions);
+    if (session) {
+        redirect("/"); // Redirect to home if already signed in
+    }
     return (
-        <div>
-            <h1>Sign In</h1>
-            <p>Sign in to your account</p>
-            {/* Add your sign-in form here */}
-        </div>
-    );
+        <AuthSignIn />
+    )
 }
+
 export default SignInPage;

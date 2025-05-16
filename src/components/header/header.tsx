@@ -215,8 +215,15 @@ export default function AppHeader() {
                                 >ER</Avatar>
                             </> :
                                 <>
-                                    <Link href={""} onClick={() => signIn()} >Login</Link>
-                                </>}
+                                    <Link href="/auth/signin"
+                                    // onClick={() => {
+                                    //     signIn()
+                                    // }}
+                                    >
+                                        Login
+                                    </Link>
+                                </>
+                            }
                         </Box>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
