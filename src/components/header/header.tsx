@@ -112,7 +112,10 @@ export default function AppHeader() {
             <MenuItem>
                 <Link style={{ color: 'unset', textDecoration: 'none' }} href={"/profile"}>   Profile</Link>
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+            <MenuItem onClick={() => {
+                handleMenuClose()
+                signOut()
+            }}>Logout</MenuItem>
         </Menu>
     );
 
@@ -212,7 +215,7 @@ export default function AppHeader() {
                                 >ER</Avatar>
                             </> :
                                 <>
-                                    <Link href={"/api/auth/signin"}>Login</Link>
+                                    <Link href={""} onClick={() => signIn()} >Login</Link>
                                 </>}
                         </Box>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
