@@ -35,7 +35,7 @@ export const authOptions: AuthOptions = {
                     return res.data as any
                 }
                 else {
-                    return null
+                    throw new Error("Invalid username or password")
                 }
             }
         }),

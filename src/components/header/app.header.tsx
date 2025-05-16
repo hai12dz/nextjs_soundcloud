@@ -18,8 +18,10 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Link from 'next/link'
-import { useSession, signIn, signOut } from "next-auth/react"
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useSession, signIn, signOut } from "next-auth/react";
+
 //styled-component
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -63,9 +65,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function AppHeader() {
-    const { data: session } = useSession()
-    console.log('session', session)
-    console.log('usesession', useSession())
+    const { data: session } = useSession();
+    console.log(">>> check session: ", session)
+
+    const router = useRouter();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
         React.useState<null | HTMLElement>(null);
@@ -110,11 +113,16 @@ export default function AppHeader() {
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
             <MenuItem>
-                <Link style={{ color: 'unset', textDecoration: 'none' }} href={"/profile"}>   Profile</Link>
+                <Link href={"/profile"} style={{
+                    color: "unset",
+                    textDecoration: "unset"
+                }}>
+                    Profile
+                </Link>
             </MenuItem>
             <MenuItem onClick={() => {
-                handleMenuClose()
-                signOut()
+                handleMenuClose();
+                signOut();
             }}>Logout</MenuItem>
         </Menu>
     );
@@ -171,6 +179,10 @@ export default function AppHeader() {
         </Menu>
     );
 
+    const handleRedirectHome = () => {
+        router.push("/")
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar
@@ -185,9 +197,13 @@ export default function AppHeader() {
                             variant="h6"
                             noWrap
                             component="div"
-                            sx={{ display: { xs: 'none', sm: 'block' } }}
+                            sx={{
+                                display: { xs: 'none', sm: 'block' },
+                                cursor: "pointer"
+                            }}
+                            onClick={() => handleRedirectHome()}
                         >
-                            <Link style={{ color: 'unset', textDecoration: 'none' }} href={"/"}>   SoundCloud</Link>
+                            HoiDanIt SC
                         </Typography>
                         <Search>
                             <SearchIconWrapper>
@@ -204,26 +220,33 @@ export default function AppHeader() {
                             gap: "20px",
                             alignItems: "center",
                             cursor: "pointer",
-                            "> a ": { color: "unset", textDecoration: "none" }
-                        }}>
-                            {session ? <>
-                                <Link href={"/playlist"}>Playlist</Link>
-                                <Link href={"/like"}>Likes</Link>
-                                <span>Upload</span>
-                                <Avatar
-                                    onClick={handleProfileMenuOpen}
-                                >ER</Avatar>
-                            </> :
-                                <>
-                                    <Link href="/auth/signin"
-                                    // onClick={() => {
-                                    //     signIn()
-                                    // }}
-                                    >
-                                        Login
-                                    </Link>
-                                </>
+
+                            "> a": {
+                                color: "unset",
+                                textDecoration: "unset"
                             }
+                        }}>
+                            {
+                                session ? //fragment react
+                                    <>
+                                        <Link href={"/playlist"}>Playlists</Link>
+                                        <Link href={"/like"}>Likes</Link>
+                                        <span>Upload</span>
+                                        <Avatar
+                                            onClick={handleProfileMenuOpen}
+                                        >ER</Avatar>
+                                    </>
+                                    :
+                                    <>
+                                        <Link
+                                            href={"/auth/signin"}
+                                        >
+                                            Login
+                                        </Link>
+                                    </>
+                            }
+
+
                         </Box>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                             <IconButton

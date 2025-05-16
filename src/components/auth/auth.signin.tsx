@@ -9,9 +9,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import Link from 'next/link';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
+import { useRouter } from 'next/navigation'
 const AuthSignIn = (props: any) => {
-
+    const router = useRouter()
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -23,7 +26,7 @@ const AuthSignIn = (props: any) => {
     const [errorPassword, setErrorPassword] = useState<string>("");
 
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setIsErrorUsername(false);
         setIsErrorPassword(false);
         setErrorUsername("");
@@ -39,7 +42,19 @@ const AuthSignIn = (props: any) => {
             setErrorPassword("Password is not empty.")
             return;
         }
-        console.log(">>> check username: ", username, ' pass: ', password)
+
+        const res = await signIn("credentials", {
+            username: username,
+            password: password,
+            redirect: false
+        })
+        if (!res?.error) {
+            //redirect to home
+            router.push("/")
+        } else {
+            alert(res.error)
+        }
+        console.log(">>> check res: ", res)
     }
 
     return (
@@ -69,6 +84,10 @@ const AuthSignIn = (props: any) => {
                     }}
                 >
                     <div style={{ margin: "20px" }}>
+                        <Link href="/">
+                            <ArrowBackIcon />
+                        </Link>
+
                         <Box sx={{
                             display: "flex",
                             justifyContent: "center",
@@ -144,10 +163,11 @@ const AuthSignIn = (props: any) => {
                                     cursor: "pointer",
                                     bgcolor: "orange"
                                 }}
+                                onClick={() => {
+                                    signIn("github")
+                                }}
                             >
-                                <GitHubIcon
-                                    onClick={() => signIn("github")}
-                                    titleAccess="Login with Github" />
+                                <GitHubIcon titleAccess="Login with Github" />
                             </Avatar>
 
                             <Avatar
@@ -158,6 +178,7 @@ const AuthSignIn = (props: any) => {
                             >
                                 < GoogleIcon titleAccess="Login with Google" />
                             </Avatar>
+
                         </Box>
                     </div>
                 </Grid>
