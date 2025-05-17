@@ -11,6 +11,8 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from 'next/link';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import { useRouter } from 'next/navigation'
 const AuthSignIn = (props: any) => {
@@ -24,6 +26,9 @@ const AuthSignIn = (props: any) => {
 
     const [errorUsername, setErrorUsername] = useState<string>("");
     const [errorPassword, setErrorPassword] = useState<string>("");
+
+    const [openMessage, setOpenMessage] = useState<boolean>(false);
+    const [resMessage, setResMessage] = useState<string>("");
 
 
     const handleSubmit = async () => {
@@ -52,9 +57,9 @@ const AuthSignIn = (props: any) => {
             //redirect to home
             router.push("/")
         } else {
-            alert(res.error)
+            setOpenMessage(true);
+            setResMessage(res.error)
         }
-        console.log(">>> check res: ", res)
     }
 
     return (
@@ -119,6 +124,11 @@ const AuthSignIn = (props: any) => {
                         />
                         <TextField
                             onChange={(event) => setPassword(event.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSubmit()
+                                }
+                            }}
                             variant="outlined"
                             margin="normal"
                             required
@@ -183,6 +193,18 @@ const AuthSignIn = (props: any) => {
                     </div>
                 </Grid>
             </Grid>
+
+            <Snackbar
+                open={openMessage}
+                // autoHideDuration={5000}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <Alert
+                    onClose={() => setOpenMessage(false)}
+                    severity="error" sx={{ width: '100%' }}>
+                    {resMessage}
+                </Alert>
+            </Snackbar>
 
         </Box>
 
