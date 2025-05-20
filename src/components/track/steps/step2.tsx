@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 import { useSession } from "next-auth/react";
 import { sendRequest } from '@/utils/api';
+import { useToast } from '@/utils/toast';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
@@ -52,6 +53,7 @@ const VisuallyHiddenInput = styled('input')({
 function InputFileUpload(props: any) {
     const { setInfo, info } = props;
     const { data: session } = useSession();
+    const toast = useToast()
 
     const handleUpload = async (image: any) => {
         const formData = new FormData()
@@ -70,7 +72,8 @@ function InputFileUpload(props: any) {
             })
         } catch (error) {
             //@ts-ignore
-            alert(error?.response?.data?.message)
+            toast.error(error?.response?.data?.message)
+            // alert(error?.response?.data?.message)
         }
     }
 
@@ -96,6 +99,7 @@ interface IProps {
         percent: number;
         uploadedTrackName: string;
     }
+    setValue: (v: number) => void;
 }
 
 interface INewTrack {
@@ -108,8 +112,8 @@ interface INewTrack {
 
 const Step2 = (props: IProps) => {
     const { data: session } = useSession();
-
-    const { trackUpload } = props;
+    const { trackUpload, setValue } = props;
+    const toast = useToast();
     const [info, setInfo] = React.useState<INewTrack>({
         title: "",
         description: "",
@@ -159,9 +163,12 @@ const Step2 = (props: IProps) => {
             },
         })
         if (res.data) {
-            alert("create success")
+            setValue(0)
+            toast.success("Create a new track success!")
         } else {
-            alert(res.message)
+            toast.error(res.message)
+
+            // alert(res.message)
         }
     }
 
@@ -174,6 +181,7 @@ const Step2 = (props: IProps) => {
                 </div>
                 <LinearWithValueLabel
                     trackUpload={trackUpload}
+                    setValue={setValue}
                 />
             </div>
 
