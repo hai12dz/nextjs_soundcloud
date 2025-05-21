@@ -3,7 +3,7 @@ import { useTrackContext } from '@/lib/track.wrapper';
 import { useHasMounted } from '@/utils/customHook';
 import { Container } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 
@@ -11,21 +11,20 @@ import 'react-h5-audio-player/lib/styles.css';
 const AppFooter = () => {
     const hasMounted = useHasMounted();
     const playerRef = useRef(null);
-
-    if (!hasMounted) return (<></>)//fragment
-
     const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
 
+    useEffect(() => {
+        if (currentTrack?.isPlaying === false) {
+            //@ts-ignore
+            playerRef?.current?.audio?.current?.pause();
+        }
+        if (currentTrack?.isPlaying === true) {
+            //@ts-ignore
+            playerRef?.current?.audio?.current?.play();
+        }
+    }, [currentTrack])
 
-    //@ts-ignore
-    if (currentTrack?.isPlaying) {
-        //@ts-ignore
-        playerRef?.current?.audio?.current?.play();
-        console.log()
-    } else {
-        //@ts-ignore
-        playerRef?.current?.audio?.current?.pause();
-    }
+    if (!hasMounted) return (<></>)//fragment
 
 
     return (
@@ -65,8 +64,8 @@ const AppFooter = () => {
                         justifyContent: "center",
                         minWidth: 100
                     }}>
-                        <div style={{ color: "#ccc" }}>Eric</div>
-                        <div style={{ color: "black" }}>Who am I ?</div>
+                        <div style={{ color: "#ccc" }}>{currentTrack.description}</div>
+                        <div style={{ color: "black" }}>{currentTrack.title}</div>
                     </div>
                 </Container>
             </AppBar>
