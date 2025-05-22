@@ -1,9 +1,11 @@
-const PlaylistPage = () => {
+const PlaylistPage = async () => {
+  await new Promise(resolve => setTimeout(resolve, 3000))
+
   return (
     <div>
-      <h1>Playlist</h1>
-      <p>This is the playlist page.</p>
+      playlist page
     </div>
-  );
+  )
 }
+
 export default PlaylistPage;

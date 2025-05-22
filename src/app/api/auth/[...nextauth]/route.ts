@@ -45,7 +45,7 @@ export const authOptions: AuthOptions = {
         }),
 
     ],
-    secret: process.env.NO_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         async jwt({ token, user, account, profile, trigger }) {
             if (trigger === 'signIn' && account?.provider !== 'credentials') {
