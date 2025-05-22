@@ -12,6 +12,7 @@ import { useTrackContext } from "@/lib/track.wrapper";
 import { fetchDefaultImages, sendRequest } from "@/utils/api";
 import CommentTrack from "./comment.track";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import LikeTrack from "./like.track";
 interface IProps {
@@ -238,19 +239,21 @@ const WaveTrack = (props: IProps) => {
                                 comments?.map(item => {
                                     return (
                                         <Tooltip title={item.content} arrow key={item._id}>
-                                            <img
+                                            <Image
                                                 onPointerMove={(e) => {
                                                     const hover = hoverRef.current!;
                                                     hover.style.width = calLeft(item.moment)
                                                 }}
+                                                src={fetchDefaultImages(item.user.type)}
+                                                alt="user comment"
+                                                height={20}
+                                                width={20}
                                                 style={{
-                                                    height: 20, width: 20,
                                                     position: "absolute",
                                                     top: 71,
                                                     zIndex: 20,
                                                     left: calLeft(item.moment)
                                                 }}
-                                                src={fetchDefaultImages(item.user.type)}
                                             />
                                         </Tooltip>
                                     )
@@ -268,11 +271,13 @@ const WaveTrack = (props: IProps) => {
                     }}
                 >
                     {track?.imgUrl ?
-                        <img
+                        <Image
                             src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track?.imgUrl}`}
                             width={250}
                             height={250}
+                            alt="image track"
                         />
+
                         :
                         <div style={{
                             background: "#ccc",
