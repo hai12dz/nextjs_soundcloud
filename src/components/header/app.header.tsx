@@ -21,6 +21,8 @@ import Avatar from '@mui/material/Avatar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession, signIn, signOut } from "next-auth/react";
+import { fetchDefaultImages } from '@/utils/api';
+import Image from 'next/image';
 
 //styled-component
 const Search = styled('div')(({ theme }) => ({
@@ -66,7 +68,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function AppHeader() {
     const { data: session } = useSession();
-    console.log(">>> check session: ", session)
 
     const router = useRouter();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -212,6 +213,12 @@ export default function AppHeader() {
                             <StyledInputBase
                                 placeholder="Search…"
                                 inputProps={{ 'aria-label': 'search' }}
+                                onKeyDown={(e: any) => {
+                                    if (e.key === "Enter") {
+                                        if (e?.target?.value)
+                                            router.push(`/search?q=${e?.target?.value}`)
+                                    }
+                                }}
                             />
                         </Search>
                         <Box sx={{ flexGrow: 1 }} />
@@ -232,9 +239,15 @@ export default function AppHeader() {
                                         <Link href={"/playlist"}>Playlists</Link>
                                         <Link href={"/like"}>Likes</Link>
                                         <Link href={"/track/upload"}>Upload</Link>
-                                        <Avatar
+
+                                        <Image
                                             onClick={handleProfileMenuOpen}
-                                        >ER</Avatar>
+                                            src={fetchDefaultImages(session.user.type)}
+                                            alt='avatar'
+                                            height={35}
+                                            width={35}
+                                        />
+
                                     </>
                                     :
                                     <>

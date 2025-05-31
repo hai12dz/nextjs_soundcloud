@@ -1,11 +1,14 @@
 import MainSlider from "@/components/main/main.slider";
 import { Container } from "@mui/material";
 import { sendRequest } from "@/utils/api";
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Trang Chủ | Hỏi Dân IT SC',
+  description: 'miêu tả thôi mà',
+}
 
 export default async function HomePage() {
-  const session = await getServerSession(authOptions);
 
   const chills = await sendRequest<IBackendRes<ITrackTop[]>>({
     url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/top`,

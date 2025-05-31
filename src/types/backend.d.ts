@@ -80,18 +80,24 @@ declare global {
 
     interface ITrackLike {
         "_id": string;
+        "title": string;
+        "description": string;
+        "category": string;
+        "imgUrl": string;
+        "trackUrl": string;
+        "countLike": number;
+        "countPlay": number;
+        "createdAt": string;
+        "updatedAt": string;
+    }
+
+    interface IPlaylist {
+        "_id": string;
+        "title": string;
+        "isPublic": boolean;
         "user": string;
-        "tracks":
-        {
-            "_id": string;
-            "title": string;
-            "description": string;
-            "category": string;
-            "imgUrl": string;
-            "trackUrl": string;
-            "countLike": number;
-            "countPlay": number;
-        }[]
+        "tracks": IShareTrack[],
+        "isDeleted": boolean;
         "createdAt": string;
         "updatedAt": string;
     }

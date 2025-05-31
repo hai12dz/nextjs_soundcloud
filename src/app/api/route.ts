@@ -1,14 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse, NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest, response: NextResponse) {
-    const { searchParams } = new URL(request.url)
-    return await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/${searchParams.get('audio')}`)
+    const url = new URL(request.url);
+    const searchParams = new URLSearchParams(url.search);
+    const fileName = searchParams.get("audio");
+    return await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/${fileName}`)
 }
-
-
-
-
-
-
-
-
