@@ -329,3 +329,15 @@ Trong ProductsPage, nếu bạn muốn dùng tag:
 const resTag = await fetch(`https://api.example.com/products?category=${category}`, {
   next: { tags: ["products"] }, // gắn tag
 });
+```
+11. router.refresh() trong Next.js
+
+
+Trong Next.js App Router (13+), mỗi route có server component hoặc data fetch. Khi bạn gọi:
+```tsx
+import { useRouter } from 'next/navigation';
+
+const router = useRouter();
+router.refresh();
+```
+Nó sẽ làm mới (re-fetch) dữ liệu và server component của route hiện tại, tương tự như tải lại trang
