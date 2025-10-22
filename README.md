@@ -506,3 +506,13 @@ Tài liệu này cung cấp các khái niệm và pattern cơ bản trong Next.j
 - ✅ Revalidation Strategies
 
 Happy coding! 🚀
+## 12. Màn hình trong Tailwind CSS
+
+| Class prefix | Áp dụng khi màn hình ≥ | Ví dụ sử dụng    |
+| ------------- | ---------------------- | ---------------- |
+| `sm:`         | 640px                  | `sm:text-lg`     |
+| `md:`         | 768px                  | `md:w-1/2`       |
+| `lg:`         | 1024px                 | `lg:grid-cols-3` |
+| `xl:`         | 1280px                 | `xl:p-10`        |
+| `2xl:`        | 1536px                 | `2xl:max-w-7xl`  |
+
