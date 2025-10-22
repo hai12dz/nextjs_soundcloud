@@ -516,3 +516,23 @@ Happy coding! 🚀
 | `xl:`         | 1280px                 | `xl:p-10`        |
 | `2xl:`        | 1536px                 | `2xl:max-w-7xl`  |
 
+## 13. Các hình ảnh minh họa Flexbox
+
+- Trong CSS, **width** của một `div` mặc định là `100%` (lấy theo cha), còn **height** thì lại lấy theo con dài nhất.
+- Theo mặc định, chiều cao của mỗi hàng trong Flexbox sẽ bằng với chiều cao của phần tử cao nhất trong hàng đó.
+- **Lưu ý:** Khi có 2 hàng, `align-items` sẽ căn từng item theo từng hàng nó đang ở.
+
+### Space-between
+![Space-between](image.png)
+
+### Space-around
+![Space-around](image-1.png)
+
+### Align-items: căn giữa theo chiều dọc, căn theo div cha
+![Align-items](image-4.png)
+
+### Justify-items: chỉ dùng được trong Grid layout, căn chỉnh theo chiều ngang của mỗi frame
+![Justify-items](image-5.png)
+
+### Align-content: khi có 2 hàng, nó căn giữa toàn bộ các hàng theo chiều dọc container
+![Align-content](image-6.png)
