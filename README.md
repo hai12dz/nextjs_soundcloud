@@ -536,3 +536,152 @@ Happy coding! 🚀
 
 ### Align-content: khi có 2 hàng, nó căn giữa toàn bộ các hàng theo chiều dọc container
 ![Align-content](image-6.png)
+# CSS Position Absolute và Flexbox - Tài liệu quan trọng
+
+## 14. Hành vi của Position Absolute trong Flex Container
+
+### Câu hỏi
+Trong một cấu trúc:
+- Div cha: `position: relative`, `display: flex`, `justify-content: center`
+- Div con: `position: absolute`
+- **CHƯA** set `top` và `left`
+
+❓ **Vị trí của div con có bị ảnh hưởng bởi `justify-content: center` không?**
+
+### Câu trả lời
+✅ **CÓ** - Div con `absolute` vẫn bị ảnh hưởng bởi `justify-content: center` của div cha.
+
+---
+
+## Giải thích chi tiết
+
+Khi một phần tử có `position: absolute` mà **chưa set** `top`, `left`, `right`, `bottom`:
+
+1. **Vẫn nằm trong flow layout ban đầu**
+   - Phần tử vẫn chịu ảnh hưởng của flexbox
+   - Vị trí được tính toán dựa trên flex alignment
+
+2. **Không chiếm không gian thực tế**
+   - Các phần tử khác sẽ xếp như thể nó không tồn tại
+   - Không đẩy các phần tử khác đi
+
+---
+
+## Demo Code
+
+### Case 1: Chưa set top/left (Ăn theo flex)
+```html
+<div style="
+  position: relative; 
+  display: flex; 
+  justify-content: center; 
+  border: 2px solid blue; 
+  padding: 20px;
+">
+  <div style="
+    position: absolute; 
+    background: red; 
+    padding: 10px;
+  ">
+    Div absolute (chưa set top/left)
+  </div>
+</div>
+```
+
+**Kết quả:** ✅ Div con sẽ nằm ở **giữa** theo `justify-content: center`
+
+---
+
+### Case 2: Đã set top/left (Thoát khỏi flex)
+```html
+<div style="
+  position: relative; 
+  display: flex; 
+  justify-content: center; 
+  border: 2px solid blue; 
+  padding: 20px;
+">
+  <div style="
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    background: red; 
+    padding: 10px;
+  ">
+    Div absolute (đã set top/left)
+  </div>
+</div>
+```
+
+**Kết quả:** ❌ Div con bỏ qua flex và căn theo **góc trên-trái** của div cha `relative`
+
+---
+
+## So sánh trực quan
+
+| Trường hợp | Vị trí | Ảnh hưởng của flex | Positioning context |
+|------------|--------|-------------------|---------------------|
+| **Chưa set top/left** | Giữa container | ✅ CÓ | Flex layout |
+| **Đã set top/left** | Theo tọa độ chỉ định | ❌ KHÔNG | Relative parent |
+
+---
+
+## Kết luận quan trọng
+
+### ✅ Chưa set top/left
+- Vẫn **ăn theo flex layout**
+- Chịu ảnh hưởng của `justify-content`, `align-items`
+- Vị trí dựa trên flex alignment
+
+### ❌ Đã set top/left  
+- **Thoát khỏi flex** hoàn toàn
+- Căn theo positioning context (nearest positioned ancestor)
+- Không còn chịu ảnh hưởng của flex properties
+
+---
+
+## Ứng dụng thực tế
+
+### Pattern 1: Center absolute element dùng flex
+```css
+.parent {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.child {
+  position: absolute;
+  /* Không set top/left - sẽ tự động center */
+}
+```
+
+### Pattern 2: Absolute positioning chính xác
+```css
+.parent {
+  position: relative;
+  display: flex; /* Không ảnh hưởng */
+}
+
+.child {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  /* Bỏ qua flex, căn theo parent */
+}
+```
+
+---
+
+## Lưu ý
+
+⚠️ **Quan trọng:**
+- Hành vi này chỉ xảy ra khi **chưa set bất kỳ offset nào** (top/left/right/bottom)
+- Ngay khi set **một offset bất kỳ**, phần tử sẽ thoát khỏi flex flow hoàn toàn
+- Đây là điểm dễ gây nhầm lẫn nhất khi kết hợp `position: absolute` với flexbox
+
+---
+
+**Ngày cập nhật:** 2025  
+**Trạng thái:** Production-ready documentation
